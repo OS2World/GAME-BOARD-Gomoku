@@ -1,0 +1,30 @@
+#---------------------------------
+# bigps MAKEFILE.
+#---------------------------------
+
+CC         = icc /c /ti /O- /Ge /Gd- /Se /Re /ss /Gm+ /sm
+
+gomoku.obj : gomoku.c
+   $(CC) gomoku.c
+
+gomoku.res: gomoku.rc
+   rc -r gomoku.rc
+
+gomoku.exe : gomoku.obj gomoku.res
+   ilink.exe /NOFREE /ALIGN:16 @<< <<gomoku.def 
+gomoku.obj,
+$@,
+gomoku.map,
+os2386,
+gomoku.def
+<<NOKEEP
+NAME            gomoku      WINDOWAPI
+DESCRIPTION     '(c) Jasper de Keijzer, 1995'
+PROTMODE
+DATA            MULTIPLE
+HEAPSIZE        8192
+STACKSIZE       8192
+EXPORTS	        ClientWndProc
+<<NOKEEP
+   rc gomoku.res gomoku.exe
+

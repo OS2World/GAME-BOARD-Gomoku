@@ -1,0 +1,14 @@
+#define INCL_WIN
+#include <os2.h>
+#include "gomoku.h"
+
+BITMAP IB_BOARD  box.bmp
+ICON   IC_GOMOKU gomoku.ico
+
+MENU ID_RESOURCE
+BEGIN
+MENUITEM "New",  IDM_NEW,  MIS_TEXT
+MENUITEM "Help", IDM_HELP, MIS_TEXT
+MENUITEM "Quit", IDM_QUIT, MIS_TEXT
+END
+

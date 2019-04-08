@@ -1,0 +1,17 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+
+DLGTEMPLATE 100 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Gomoku", 100, 83, 40, 315, 178, WS_VISIBLE, FCF_TITLEBAR
+    BEGIN
+        CONTROL         "", 101, 16, 8, 221, 166, "GOMOKU", WS_GROUP | 
+                        WS_VISIBLE
+        PUSHBUTTON      "New", 102, 252, 155, 40, 14
+        PUSHBUTTON      "Auto", 103, 252, 141, 40, 14
+        PUSHBUTTON      "Hint", 104, 252, 127, 40, 14
+        PUSHBUTTON      "Help", 105, 252, 113, 40, 14
+        PUSHBUTTON      "Quit", 106, 252, 68, 40, 14
+    END
+END
