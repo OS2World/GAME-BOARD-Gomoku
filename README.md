@@ -2,6 +2,8 @@
 
 Five-in-a-row board game for OS/2 Presentation Manager.
 
+![Gomoku ScreenShot](doc/Gomoku.png)
+
 **Version:** 1.2  
 **License:** GNU GPL v3  
 **Original author:** Jasper de Keijzer (1996)  
