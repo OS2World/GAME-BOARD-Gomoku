@@ -1,0 +1,13 @@
+DLGTEMPLATE IDD_ABOUT
+     {
+     DIALOG "About Gomoku", IDD_ABOUT, 32, 24, 240, 110,, FCF_TITLEBAR|FCF_DLGBORDER
+          {
+          CTEXT "Gomoku for OS/2",                  -1, 10, 90, 220, 8
+          CTEXT "Version 1.2",                      -1, 10, 78, 220, 8
+          CTEXT "OpenWatcom Release",               -1, 10, 66, 220, 8
+          CTEXT "(c) 1996, Jasper de Keijzer",      -1, 10, 54, 220, 8
+          CTEXT "(c) 2026, OS2World",               -1, 10, 42, 220, 8
+          CTEXT "GNU GPL V3",                       -1, 10, 30, 220, 8
+          DEFPUSHBUTTON "Close" DID_OK,                 98, 10, 44, 14, WS_GROUP
+          }
+     }

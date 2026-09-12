@@ -1,0 +1,5 @@
+bin\*.obj
+bin\*.res
+bin\*.map
+bin\*.exe
+*.log

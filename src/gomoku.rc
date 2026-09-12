@@ -1,0 +1,68 @@
+#define INCL_WIN
+#include <os2.h>
+
+/* Resource and menu IDs (keep in sync with gomoku.h) */
+#define ID_RESOURCE         1
+#define IB_BOARD            2
+#define IDD_ABOUT           501
+#define IDM_NEW             100
+#define IDM_EXIT            110
+#define IDM_SAVEONEXIT      200
+#define IDM_FRAME           210
+#define IDM_LANG_EN         300
+#define IDM_LANG_ES         301
+#define IDM_LANG_NL         302
+#define IDM_LANG_DE         303
+#define IDM_LANG_FR         304
+#define IDM_LANG_IT         305
+#define IDM_ABOUT           999
+#define IDM_SUBMENU_GAME    1000
+#define IDM_SUBMENU_OPTIONS 1001
+#define IDM_SUBMENU_HELP    1002
+#define IDM_SUBMENU_LANG    1003
+
+POINTER ID_RESOURCE  gomoku.ico
+
+BITMAP IB_BOARD  box.bmp
+
+MENU ID_RESOURCE
+BEGIN
+    SUBMENU "~Game", IDM_SUBMENU_GAME
+    BEGIN
+        MENUITEM "~New Game\tCtrl+N",   IDM_NEW,        MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "E~xit\tCtrl+X",       IDM_EXIT,       MIS_TEXT
+    END
+    SUBMENU "~Options", IDM_SUBMENU_OPTIONS
+    BEGIN
+        SUBMENU "~Language", IDM_SUBMENU_LANG
+        BEGIN
+            MENUITEM "English",         IDM_LANG_EN,    MIS_TEXT
+            MENUITEM "Espanol",         IDM_LANG_ES,    MIS_TEXT
+            MENUITEM "Nederlands",      IDM_LANG_NL,    MIS_TEXT
+            MENUITEM "Deutsch",         IDM_LANG_DE,    MIS_TEXT
+            MENUITEM "Francais",        IDM_LANG_FR,    MIS_TEXT
+            MENUITEM "Italiano",        IDM_LANG_IT,    MIS_TEXT
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "~Save settings on exit", IDM_SAVEONEXIT, MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "~Frame Controls\tCtrl+F", IDM_FRAME,  MIS_TEXT
+    END
+    SUBMENU "~Help", IDM_SUBMENU_HELP
+    BEGIN
+        MENUITEM "~About...",           IDM_ABOUT,      MIS_TEXT
+    END
+END
+
+ACCELTABLE ID_RESOURCE
+BEGIN
+    "n", IDM_NEW,   CONTROL
+    "N", IDM_NEW,   CONTROL
+    "x", IDM_EXIT,  CONTROL
+    "X", IDM_EXIT,  CONTROL
+    "f", IDM_FRAME, CONTROL
+    "F", IDM_FRAME, CONTROL
+END
+
+#include "about.dlg"

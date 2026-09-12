@@ -1,0 +1,3 @@
+src\gomoku.c(195): Warning! W202: Symbol 'gState' has been defined, but not referenced
+src\gomoku.c(148): Warning! W202: Symbol 'bldlevel' has been defined, but not referenced
+src\gomoku.c(365): Warning! W202: Symbol 'GameOver' has been defined, but not referenced

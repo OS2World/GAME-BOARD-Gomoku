@@ -1,0 +1,30 @@
+Gomoku for OS/2 - Changelog
+===========================
+
+Version 1.2  (2026-09-11)
+--------------------------
+- 6-language interface: English, Espanol, Nederlands, Deutsch, Francais, Italiano
+- Language selection persists via OS/2 User Profile (HINI_USERPROFILE)
+- Frame Controls (Ctrl+F): toggle title bar, system menu, minimize button,
+  and menu bar for a borderless / kiosk-style window
+- Board enlarged to 19x19 intersections with 40x40 pixel cells (doubled from 1.1)
+- Cell borders drawn with GPI (GpiBox) so they scale correctly with cell size
+- Application icon (gomoku.ico) added; loaded via FCF_ICON
+- Accelerator table extended: Ctrl+F for Frame Controls
+
+Version 1.1  (2026-09-11)
+--------------------------
+- OpenWatcom port (OW 1.9 / 2.0)
+- Fix EXPENTRY prototype: USHORT msg -> ULONG msg
+- Fix mouse coordinate extraction: SHORT1/SHORT2FROMMP
+- Fix menu command dispatch: SHORT1FROMMP(mp1)
+- Standard 3-menu layout: Game / Options / Help
+- About dialog per OS2World standard (plan.txt §11)
+- Window centered on desktop at startup
+- BLDLEVEL string added
+- Legacy ICC sources preserved in legacy/
+
+Version 1.0  (2004-03-28)  Jasper de Keijzer
+----------------------------------------------
+- Initial release (ICC build)
+- Algorithm fix for diagonal line detection
