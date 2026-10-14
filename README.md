@@ -18,7 +18,12 @@ You play Green. The computer plays Red and responds immediately after
 each of your moves.
 
 The interface is available in six languages: English, Spanish, Dutch, German,
-French, and Italian. The selected language is saved automatically.
+French, and Italian.
+
+`Options > Key Mapping...` lets you choose the mouse button that places a
+piece (left button by default). The language, the mouse button and the
+"Save settings on exit" choice are saved when the game ends; "Save settings
+on exit" is on by default.
 
 ## Building
 

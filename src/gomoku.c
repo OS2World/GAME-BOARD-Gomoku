@@ -26,9 +26,15 @@
 #define ID_RESOURCE         1
 #define IB_BOARD            2
 #define IDD_ABOUT           501
+#define IDD_KEYMAP          502
+#define IDC_KM_HINT         510
+#define IDC_KM_LABEL        511
+#define IDC_KM_ENTRY        512
+#define IDC_KM_DEFAULT      513
 #define IDM_NEW             100
 #define IDM_EXIT            110
 #define IDM_SAVEONEXIT      200
+#define IDM_KEYMAP          205
 #define IDM_FRAME           210
 #define IDM_LANG_EN         300
 #define IDM_LANG_ES         301
@@ -42,7 +48,7 @@
 #define IDM_SUBMENU_HELP    1002
 #define IDM_SUBMENU_LANG    1003
 
-/* Language support (plan.txt §8) */
+/* Language support (plan.txt sec.8) */
 #define LANG_EN    0
 #define LANG_ES    1
 #define LANG_NL    2
@@ -57,6 +63,9 @@ enum {
     STR_MENU_FRAME, STR_MENU_HELP, STR_MENU_ABOUT,
     STR_MSG_IWON, STR_TITLE_IWON,
     STR_MSG_YOUWON, STR_TITLE_YOUWON,
+    STR_MENU_KEYMAP, STR_KM_TITLE, STR_KM_HINT, STR_KM_ACT0,
+    STR_KM_BTN1, STR_KM_BTN2, STR_KM_BTN3, STR_KM_DEFAULT,
+    STR_DLG_OK, STR_DLG_CANCEL,
     STR_COUNT
 };
 
@@ -74,7 +83,8 @@ const char *lang_strings[LANG_COUNT][STR_COUNT] = {
     "~Help",
     "~About...",
     "I won!", "Ha Ha",
-    "You won!", "Congratulations"
+    "You won!", "Congratulations",
+    "~Key Mapping...", "Key Mapping", "Click the box, then click it again with the mouse button to use.", "Place a piece", "Left button", "Right button", "Middle button", "Default", "OK", "Cancel"
   },
   { /* ES */
     "~Juego",
@@ -87,7 +97,8 @@ const char *lang_strings[LANG_COUNT][STR_COUNT] = {
     "~Ayuda",
     "~About...",
     "Yo gane!", "Ja Ja",
-    "Has ganado!", "Felicitaciones"
+    "Has ganado!", "Felicitaciones",
+    "~Asignacion de teclas...", "Asignacion de teclas", "Haga clic en el cuadro y de nuevo con el boton del raton que quiera usar.", "Colocar una pieza", "Boton izquierdo", "Boton derecho", "Boton central", "Por defecto", "Aceptar", "Cancelar"
   },
   { /* NL */
     "~Spel",
@@ -100,7 +111,8 @@ const char *lang_strings[LANG_COUNT][STR_COUNT] = {
     "~Help",
     "~About...",
     "Ik heb gewonnen!", "Ha Ha",
-    "Jij hebt gewonnen!", "Gefeliciteerd"
+    "Jij hebt gewonnen!", "Gefeliciteerd",
+    "Toetsen toe~wijzen...", "Toetsen toewijzen", "Klik op het vak en klik er nogmaals op met de muisknop die u wilt gebruiken.", "Steen plaatsen", "Linkerknop", "Rechterknop", "Middelste knop", "Standaard", "OK", "Annuleren"
   },
   { /* DE */
     "~Spiel",
@@ -113,7 +125,8 @@ const char *lang_strings[LANG_COUNT][STR_COUNT] = {
     "~Hilfe",
     "~About...",
     "Ich habe gewonnen!", "Ha Ha",
-    "Du hast gewonnen!", "Herzlichen Glueckwunsch"
+    "Du hast gewonnen!", "Herzlichen Glueckwunsch",
+    "~Tastenzuordnung...", "Tastenzuordnung", "Klicken Sie auf das Feld und dann erneut mit der gewuenschten Maustaste.", "Stein setzen", "Linke Taste", "Rechte Taste", "Mittlere Taste", "Standard", "OK", "Abbrechen"
   },
   { /* FR */
     "~Jeu",
@@ -126,7 +139,8 @@ const char *lang_strings[LANG_COUNT][STR_COUNT] = {
     "~Aide",
     "~About...",
     "J'ai gagne!", "Ha Ha",
-    "Vous avez gagne!", "Felicitations"
+    "Vous avez gagne!", "Felicitations",
+    "~Affectation des touches...", "Affectation des touches", "Cliquez sur la case, puis cliquez dessus avec le bouton de souris voulu.", "Poser un pion", "Bouton gauche", "Bouton droit", "Bouton central", "Defaut", "OK", "Annuler"
   },
   { /* IT */
     "~Gioco",
@@ -139,18 +153,20 @@ const char *lang_strings[LANG_COUNT][STR_COUNT] = {
     "~Aiuto",
     "~About...",
     "Ho vinto!", "Ha Ha",
-    "Hai vinto!", "Congratulazioni"
+    "Hai vinto!", "Congratulazioni",
+    "Assegnazione ~tasti...", "Assegnazione tasti", "Fai clic sulla casella, poi di nuovo con il pulsante del mouse da usare.", "Posiziona una pedina", "Pulsante sinistro", "Pulsante destro", "Pulsante centrale", "Predefinito", "OK", "Annulla"
   }
 };
 
 #define tr(id) ((char*)lang_strings[current_lang][(id)])
 
 static const char bldlevel[] =
-    "@#Jasper de Keijzer:1.2#@##1## 11 Sep 2026 00:00:00      "
+    "@#Jasper de Keijzer:1.2#@##1## 13 Oct 2026 00:00:00      "
     "ARCAOS:::0::::@@Gomoku for OS/2 - 5-in-a-row board game\r\n\x1a";
 
 MRESULT EXPENTRY ClientWndProc(HWND, ULONG, MPARAM, MPARAM);
 MRESULT EXPENTRY AboutDlgProc(HWND, ULONG, MPARAM, MPARAM);
+MRESULT EXPENTRY KeyMapDlgProc(HWND, ULONG, MPARAM, MPARAM);
 
 HWND hwndFrame, hwndClient;
 
@@ -206,7 +222,10 @@ static int  WinningLine;
 static int  xWinPos, yWinPos;
 static long Weight[] = { 0, 0, 4, 20, 100, 500, 0 };
 
-static BOOL bSaveOnExit = FALSE;
+static BOOL bSaveOnExit = TRUE;     /* "Save settings on exit" is on by default */
+
+/* Mouse button (1 left, 2 right, 3 middle) that places a piece (Key Mapping) */
+static int btn_place = 1;
 
 /*--------------------------------------------------------------------------*/
 static int opponentColor(void)
@@ -432,6 +451,8 @@ static void set_language(int lang)
     hSub = mi.hwndSubMenu;
     if (hSub) {
         WinSendMsg(hSub, MM_SETITEMTEXT,
+                   MPFROMSHORT(IDM_KEYMAP),       MPFROMP(tr(STR_MENU_KEYMAP)));
+        WinSendMsg(hSub, MM_SETITEMTEXT,
                    MPFROMSHORT(IDM_SUBMENU_LANG), MPFROMP(tr(STR_MENU_LANGUAGE)));
         WinSendMsg(hSub, MM_SETITEMTEXT,
                    MPFROMSHORT(IDM_SAVEONEXIT),   MPFROMP(tr(STR_MENU_SAVEONEXIT)));
@@ -451,42 +472,173 @@ static void set_language(int lang)
 /*--------------------------------------------------------------------------*/
 static void toggle_frame(void)
 {
-    HWND hMenu = WinWindowFromID(hwndFrame, FID_MENU);
+    RECTL rcl;
+    SWP   swp;
+    LONG  cw, ch, nw, nh;
+    HWND  hMenu;
+
+    /* the client area keeps its size: no gray bar where the title bar was */
+    WinQueryWindowRect(hwndClient, &rcl);
+    cw = rcl.xRight - rcl.xLeft;
+    ch = rcl.yTop   - rcl.yBottom;
 
     if (!bFrameHidden) {
         WinSetParent(hwndTitleBar, HWND_OBJECT, FALSE);
         WinSetParent(hwndSysMenu,  HWND_OBJECT, FALSE);
         WinSetParent(hwndMinMax,   HWND_OBJECT, FALSE);
         WinSetParent(hwndMenuBar,  HWND_OBJECT, FALSE);
+        bFrameHidden = TRUE;
     } else {
+        /* PM clears WS_VISIBLE on a reparent to the object window */
         WinSetParent(hwndTitleBar, hwndFrame, FALSE);
         WinSetParent(hwndSysMenu,  hwndFrame, FALSE);
         WinSetParent(hwndMinMax,   hwndFrame, FALSE);
         WinSetParent(hwndMenuBar,  hwndFrame, FALSE);
+        WinShowWindow(hwndTitleBar, TRUE);
+        WinShowWindow(hwndSysMenu,  TRUE);
+        WinShowWindow(hwndMinMax,   TRUE);
+        WinShowWindow(hwndMenuBar,  TRUE);
+        bFrameHidden = FALSE;
     }
     WinSendMsg(hwndFrame, WM_UPDATEFRAME,
                (MPARAM)(FCF_TITLEBAR | FCF_SYSMENU | FCF_MINBUTTON | FCF_MENU), NULL);
+
+    /* resize the frame around the unchanged client, keeping its top left corner */
+    rcl.xLeft = 0;  rcl.yBottom = 0;  rcl.xRight = cw;  rcl.yTop = ch;
+    WinCalcFrameRect(hwndFrame, &rcl, FALSE);
+    nw = rcl.xRight - rcl.xLeft;
+    nh = rcl.yTop   - rcl.yBottom;
+    WinQueryWindowPos(hwndFrame, &swp);
+    WinSetWindowPos(hwndFrame, HWND_TOP, swp.x, swp.y + swp.cy - nh, nw, nh,
+                    SWP_MOVE | SWP_SIZE);
     WinInvalidateRect(hwndFrame, NULL, TRUE);
     WinUpdateWindow(hwndFrame);
 
-    bFrameHidden = !bFrameHidden;
+    hMenu = WinWindowFromID(hwndFrame, FID_MENU);
     if (hMenu)
         WinCheckMenuItem(hMenu, IDM_FRAME, bFrameHidden);
 }
 
 /*--------------------------------------------------------------------------*/
-static void load_lang(void)
+static void load_settings(void)
 {
-    ULONG ul = 0, cb = sizeof(ul);
-    PrfQueryProfileData(HINI_USERPROFILE, "Gomoku", "Language", &ul, &cb);
-    current_lang = (int)ul;
+    ULONG ul, cb;
+
+    ul = 0;  cb = sizeof(ul);
+    if (PrfQueryProfileData(HINI_USERPROFILE, "Gomoku", "Language", &ul, &cb))
+        current_lang = (int)ul;
     if (current_lang < 0 || current_lang >= LANG_COUNT) current_lang = LANG_EN;
+
+    ul = 1;  cb = sizeof(ul);                      /* on by default */
+    if (PrfQueryProfileData(HINI_USERPROFILE, "Gomoku", "SaveOnExit", &ul, &cb))
+        bSaveOnExit = (ul != 0);
+
+    ul = 1;  cb = sizeof(ul);
+    if (PrfQueryProfileData(HINI_USERPROFILE, "Gomoku", "Button", &ul, &cb))
+        btn_place = (int)ul;
+    if (btn_place < 1 || btn_place > 3) btn_place = 1;
 }
 
-static void save_lang(void)
+/* the "Save settings on exit" choice itself is always remembered */
+static void save_saveonexit(void)
 {
-    ULONG ul = (ULONG)current_lang;
+    ULONG ul = bSaveOnExit ? 1 : 0;
+    PrfWriteProfileData(HINI_USERPROFILE, "Gomoku", "SaveOnExit", &ul, sizeof(ul));
+}
+
+static void save_settings(void)
+{
+    ULONG ul;
+
+    ul = (ULONG)current_lang;
     PrfWriteProfileData(HINI_USERPROFILE, "Gomoku", "Language", &ul, sizeof(ul));
+    ul = (ULONG)btn_place;
+    PrfWriteProfileData(HINI_USERPROFILE, "Gomoku", "Button", &ul, sizeof(ul));
+    save_saveonexit();
+}
+
+/*--------------------------------------------------------------------------*/
+/* Key Mapping: the mouse button that places a piece                         */
+#define WM_KM_INPUT  (WM_USER + 2)
+
+static PFNWP pfnKmEntry;
+
+static int BtnOf(ULONG msg)
+{
+    switch (msg) {
+        case WM_BUTTON1DOWN: case WM_BUTTON1DBLCLK: return 1;
+        case WM_BUTTON2DOWN: case WM_BUTTON2DBLCLK: return 2;
+        case WM_BUTTON3DOWN: case WM_BUTTON3DBLCLK: return 3;
+    }
+    return 0;
+}
+
+/* Capture box: the first click only focuses it, a click on the focused box
+ * assigns the mouse button used */
+static MRESULT EXPENTRY KmEntryProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
+{
+    SHORT btn = 0;
+
+    switch (msg) {
+        case WM_BUTTON1DOWN: btn = 1; break;
+        case WM_BUTTON2DOWN: btn = 2; break;
+        case WM_BUTTON3DOWN: btn = 3; break;
+        case WM_CHAR:
+            if (!(SHORT1FROMMP(mp1) & KC_KEYUP) &&
+                (SHORT1FROMMP(mp1) & KC_VIRTUALKEY) &&
+                (SHORT2FROMMP(mp2) == VK_TAB   || SHORT2FROMMP(mp2) == VK_BACKTAB ||
+                 SHORT2FROMMP(mp2) == VK_ENTER || SHORT2FROMMP(mp2) == VK_NEWLINE ||
+                 SHORT2FROMMP(mp2) == VK_ESC))
+                break;                      /* the dialog handles these */
+            return (MRESULT)TRUE;           /* swallow every other key  */
+    }
+    if (btn && WinQueryFocus(HWND_DESKTOP) == hwnd) {
+        WinPostMsg(WinQueryWindow(hwnd, QW_PARENT), WM_KM_INPUT,
+                   MPFROMLONG(btn), MPVOID);
+        return (MRESULT)TRUE;
+    }
+    return pfnKmEntry(hwnd, msg, mp1, mp2);
+}
+
+MRESULT EXPENTRY KeyMapDlgProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
+{
+    static int tmp;
+
+    switch (msg) {
+        case WM_INITDLG:
+            tmp = btn_place;
+            WinSetWindowText(hwnd, tr(STR_KM_TITLE));
+            WinSetDlgItemText(hwnd, IDC_KM_HINT,    tr(STR_KM_HINT));
+            WinSetDlgItemText(hwnd, IDC_KM_LABEL,   tr(STR_KM_ACT0));
+            WinSetDlgItemText(hwnd, DID_OK,         tr(STR_DLG_OK));
+            WinSetDlgItemText(hwnd, DID_CANCEL,     tr(STR_DLG_CANCEL));
+            WinSetDlgItemText(hwnd, IDC_KM_DEFAULT, tr(STR_KM_DEFAULT));
+            pfnKmEntry = WinSubclassWindow(WinWindowFromID(hwnd, IDC_KM_ENTRY), KmEntryProc);
+            WinSetDlgItemText(hwnd, IDC_KM_ENTRY, tr(STR_KM_BTN1 + tmp - 1));
+            return (MRESULT)FALSE;
+
+        case WM_KM_INPUT:
+            tmp = (int)LONGFROMMP(mp1);
+            WinSetDlgItemText(hwnd, IDC_KM_ENTRY, tr(STR_KM_BTN1 + tmp - 1));
+            return 0;
+
+        case WM_COMMAND:
+            switch (COMMANDMSG(&msg)->cmd) {
+                case DID_OK:
+                    btn_place = tmp;
+                    WinDismissDlg(hwnd, TRUE);
+                    return 0;
+                case DID_CANCEL:
+                    WinDismissDlg(hwnd, FALSE);
+                    return 0;
+                case IDC_KM_DEFAULT:
+                    tmp = 1;
+                    WinSetDlgItemText(hwnd, IDC_KM_ENTRY, tr(STR_KM_BTN1));
+                    return 0;
+            }
+            break;
+    }
+    return WinDefDlgProc(hwnd, msg, mp1, mp2);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -530,6 +682,12 @@ MRESULT EXPENTRY ClientWndProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
                     WinCheckMenuItem(
                         WinWindowFromID(hwndFrame, FID_MENU),
                         IDM_SAVEONEXIT, bSaveOnExit);
+                    save_saveonexit();
+                    break;
+                case IDM_KEYMAP:
+                    WinDlgBox(HWND_DESKTOP, hwndFrame,
+                              KeyMapDlgProc, (HMODULE)0,
+                              IDD_KEYMAP, NULL);
                     break;
                 case IDM_FRAME:
                     toggle_frame();
@@ -541,7 +699,6 @@ MRESULT EXPENTRY ClientWndProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
                 case IDM_LANG_FR:
                 case IDM_LANG_IT:
                     set_language(SHORT1FROMMP(mp1) - IDM_LANG_EN);
-                    save_lang();
                     break;
                 case IDM_ABOUT:
                     WinDlgBox(HWND_DESKTOP, hwndFrame,
@@ -556,6 +713,12 @@ MRESULT EXPENTRY ClientWndProc(HWND hwnd, ULONG msg, MPARAM mp1, MPARAM mp2)
 
         case WM_BUTTON1DOWN:
         case WM_BUTTON1DBLCLK:
+        case WM_BUTTON2DOWN:
+        case WM_BUTTON2DBLCLK:
+        case WM_BUTTON3DOWN:
+        case WM_BUTTON3DBLCLK:
+            if (BtnOf(msg) != btn_place)            /* not the mapped button */
+                break;
             x = SHORT1FROMMP(mp1) / BITMAPSIZE;
             y = SHORT2FROMMP(mp1) / BITMAPSIZE;
             if (x < kGameBoardSize && y < kGameBoardSize) {
@@ -632,9 +795,10 @@ int main(void)
     hwndMinMax   = WinWindowFromID(hwndFrame, FID_MINMAX);
     hwndMenuBar  = WinWindowFromID(hwndFrame, FID_MENU);
 
-    /* Apply persisted language */
-    load_lang();
+    /* Apply persisted settings */
+    load_settings();
     set_language(current_lang);
+    WinCheckMenuItem(hwndMenuBar, IDM_SAVEONEXIT, bSaveOnExit);
 
     /* Size window to fit the board exactly */
     rcl.xLeft = 0;  rcl.yBottom = 0;
@@ -655,6 +819,9 @@ int main(void)
 
     while (WinGetMsg(hab, &qmsg, 0L, 0, 0))
         WinDispatchMsg(hab, &qmsg);
+
+    if (bSaveOnExit)
+        save_settings();
 
     WinDestroyWindow(hwndFrame);
     WinDestroyMsgQueue(hmq);

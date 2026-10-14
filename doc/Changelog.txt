@@ -1,7 +1,7 @@
 Gomoku for OS/2 - Changelog
 ===========================
 
-Version 1.2  (2026-09-11)
+Version 1.2  (2026-10-13)
 --------------------------
 - 6-language interface: English, Espanol, Nederlands, Deutsch, Francais, Italiano
 - Language selection persists via OS/2 User Profile (HINI_USERPROFILE)
@@ -11,6 +11,16 @@ Version 1.2  (2026-09-11)
 - Cell borders drawn with GPI (GpiBox) so they scale correctly with cell size
 - Application icon (gomoku.ico) added; loaded via FCF_ICON
 - Accelerator table extended: Ctrl+F for Frame Controls
+- New Options > Key Mapping... dialog (mouse only): choose the mouse button
+  that places a piece (left button by default); the other buttons are ignored.
+  Translated in all six languages
+- Options menu reordered: Key Mapping, Language, Frame Controls and
+  "Save settings on exit" at the bottom; "Save settings on exit" is now on by
+  default and really saves the language, the mouse button and the choice
+  itself when the program ends (they were saved on every change before)
+- Frame Controls (Ctrl+F): no gray bar is left at the top when the title bar
+  and menu are hidden - the window shrinks around the board and grows back
+  when the controls return, which are all shown again explicitly
 
 Version 1.1  (2026-09-11)
 --------------------------
@@ -19,7 +29,7 @@ Version 1.1  (2026-09-11)
 - Fix mouse coordinate extraction: SHORT1/SHORT2FROMMP
 - Fix menu command dispatch: SHORT1FROMMP(mp1)
 - Standard 3-menu layout: Game / Options / Help
-- About dialog per OS2World standard (plan.txt §11)
+- About dialog per OS2World standard (plan.txt sec.11)
 - Window centered on desktop at startup
 - BLDLEVEL string added
 - Legacy ICC sources preserved in legacy/

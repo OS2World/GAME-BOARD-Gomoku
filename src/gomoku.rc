@@ -5,9 +5,15 @@
 #define ID_RESOURCE         1
 #define IB_BOARD            2
 #define IDD_ABOUT           501
+#define IDD_KEYMAP          502
+#define IDC_KM_HINT         510
+#define IDC_KM_LABEL        511
+#define IDC_KM_ENTRY        512
+#define IDC_KM_DEFAULT      513
 #define IDM_NEW             100
 #define IDM_EXIT            110
 #define IDM_SAVEONEXIT      200
+#define IDM_KEYMAP          205
 #define IDM_FRAME           210
 #define IDM_LANG_EN         300
 #define IDM_LANG_ES         301
@@ -35,6 +41,7 @@ BEGIN
     END
     SUBMENU "~Options", IDM_SUBMENU_OPTIONS
     BEGIN
+        MENUITEM "~Key Mapping...",     IDM_KEYMAP,     MIS_TEXT
         SUBMENU "~Language", IDM_SUBMENU_LANG
         BEGIN
             MENUITEM "English",         IDM_LANG_EN,    MIS_TEXT
@@ -45,9 +52,9 @@ BEGIN
             MENUITEM "Italiano",        IDM_LANG_IT,    MIS_TEXT
         END
         MENUITEM SEPARATOR
-        MENUITEM "~Save settings on exit", IDM_SAVEONEXIT, MIS_TEXT
-        MENUITEM SEPARATOR
         MENUITEM "~Frame Controls\tCtrl+F", IDM_FRAME,  MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "~Save settings on exit", IDM_SAVEONEXIT, MIS_TEXT
     END
     SUBMENU "~Help", IDM_SUBMENU_HELP
     BEGIN
@@ -66,3 +73,17 @@ BEGIN
 END
 
 #include "about.dlg"
+
+DLGTEMPLATE IDD_KEYMAP
+{
+    DIALOG "Key Mapping", IDD_KEYMAP, 32, 32, 260, 74,, FCF_TITLEBAR | FCF_DLGBORDER
+        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    {
+        LTEXT       "Click the box, then click it again with the mouse button to use.", IDC_KM_HINT, 8, 50, 244, 18, DT_WORDBREAK
+        LTEXT       "Place a piece",               IDC_KM_LABEL,     8, 32, 124,  8
+        ENTRYFIELD  "",                            IDC_KM_ENTRY,   136, 30, 116, 12, ES_MARGIN | ES_READONLY | WS_TABSTOP | WS_GROUP
+        DEFPUSHBUTTON "OK",                        DID_OK,           8,  6,  76, 14, WS_GROUP
+        PUSHBUTTON    "Cancel",                    DID_CANCEL,      92,  6,  76, 14
+        PUSHBUTTON    "Default",                   IDC_KM_DEFAULT, 176,  6,  76, 14
+    }
+}

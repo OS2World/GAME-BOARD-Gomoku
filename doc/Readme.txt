@@ -16,7 +16,7 @@ to it.  No DLLs or additional files are required.
 PLAYING
 -------
 You play as Green (cross).  The computer plays as Red (nought).
-Click any empty intersection to place your piece.  The computer responds
+Click (left mouse button by default) any empty intersection to place your piece.  The computer responds
 immediately.  Get five of your pieces in a row (horizontal, vertical,
 or diagonal) to win.
 
@@ -25,11 +25,15 @@ MENU
 Game > New Game (Ctrl+N)       Start a new game
 Game > Exit     (Ctrl+X)       Quit
 
+Options > Key Mapping...        Choose the mouse button that places a piece:
+                                 click the box, then click it again with the
+                                 button to use (left button by default)
 Options > Language             Select interface language:
                                  English / Espanol / Nederlands /
                                  Deutsch / Francais / Italiano
-Options > Save settings on exit  Save language preference on exit
 Options > Frame Controls (Ctrl+F)  Toggle title bar / menu bar on and off
+Options > Save settings on exit  Save language, mouse button on exit
+                                 (on by default)
 
 Help > About...                Show program information
 

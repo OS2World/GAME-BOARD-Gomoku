@@ -6,6 +6,11 @@
 
 /* Dialog IDs */
 #define IDD_ABOUT           501
+#define IDD_KEYMAP          502
+#define IDC_KM_HINT         510
+#define IDC_KM_LABEL        511
+#define IDC_KM_ENTRY        512
+#define IDC_KM_DEFAULT      513
 
 /* Menu IDs - Game menu (100-199) */
 #define IDM_NEW             100
@@ -13,6 +18,7 @@
 
 /* Menu IDs - Options menu (200-299) */
 #define IDM_SAVEONEXIT      200
+#define IDM_KEYMAP          205
 #define IDM_FRAME           210
 
 /* Language menu IDs (300-399) */

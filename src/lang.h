@@ -1,7 +1,7 @@
 #ifndef LANG_H
 #define LANG_H
 
-/* Language indices - new projects use this order (plan.txt §8.1) */
+/* Language indices - new projects use this order (plan.txt sec.8.1) */
 #define LANG_EN    0
 #define LANG_ES    1
 #define LANG_NL    2
@@ -25,6 +25,16 @@ enum {
     STR_TITLE_IWON,
     STR_MSG_YOUWON,
     STR_TITLE_YOUWON,
+    STR_MENU_KEYMAP,
+    STR_KM_TITLE,
+    STR_KM_HINT,
+    STR_KM_ACT0,
+    STR_KM_BTN1,
+    STR_KM_BTN2,
+    STR_KM_BTN3,
+    STR_KM_DEFAULT,
+    STR_DLG_OK,
+    STR_DLG_CANCEL,
     STR_COUNT
 };
 
